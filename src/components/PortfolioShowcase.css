@@ -1,0 +1,114 @@
+.portfolio-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.portfolio-row__media {
+  position: relative;
+  aspect-ratio: 1525 / 704;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.55);
+}
+
+.portfolio-row__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.portfolio-row__frame.is-active {
+  opacity: 1;
+}
+
+.portfolio-row__copy {
+  display: grid;
+}
+
+.portfolio-row__text {
+  grid-area: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  align-self: start;
+}
+
+.portfolio-row__text.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.portfolio-row__category {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  margin-bottom: 14px;
+}
+
+.portfolio-row__copy h3 {
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+
+.portfolio-row__copy p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 420px;
+}
+
+.portfolio-row__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 26px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--bronze);
+  direction: ltr;
+}
+
+.portfolio-row__dots {
+  grid-area: 2 / 1;
+  align-self: end;
+  display: flex;
+  gap: 10px;
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-row__dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-hairline);
+  border: none;
+  padding: 0;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.portfolio-row__dots button.is-active {
+  background: var(--bronze);
+  transform: scale(1.3);
+}
+
+@media (max-width: 860px) {
+  .portfolio-row {
+    grid-template-columns: 1fr;
+  }
+  .portfolio-row__dots {
+    margin-top: 24px;
+  }
+}

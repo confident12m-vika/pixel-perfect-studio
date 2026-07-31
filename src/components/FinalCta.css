@@ -1,0 +1,64 @@
+.final-cta {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.final-cta__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+.final-cta__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+}
+
+.final-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    var(--bg-secondary) 0%,
+    rgba(23, 26, 33, 0.35) 30%,
+    rgba(23, 26, 33, 0.35) 70%,
+    var(--bg-secondary) 100%
+  );
+  pointer-events: none;
+}
+
+.final-cta > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.final-cta__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.final-cta__title,
+.final-cta__text {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.final-cta .hero__actions {
+  justify-content: center;
+}
+
+.final-cta__form {
+  width: 100%;
+  margin-top: 40px;
+}
