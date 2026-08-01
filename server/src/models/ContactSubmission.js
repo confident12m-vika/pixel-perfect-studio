@@ -4,7 +4,9 @@ const contactSubmissionSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true, lowercase: true },
-    message: { type: String, required: true, trim: true },
+    message: { type: String, trim: true, default: "" },
+    whatsapp: { type: String, trim: true, default: "" },
+    websiteUrl: { type: String, trim: true, default: "" },
     language: { type: String, default: "en" },
     status: {
       type: String,

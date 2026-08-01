@@ -6,24 +6,29 @@ const router = Router();
 
 // Public: submit the contact form
 router.post("/", async (req, res) => {
-  const { name, email, message, language } = req.body || {};
+  const { name, email, message, whatsapp, websiteUrl, language } = req.body || {};
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: "Name, email and message are required" });
+  if (!name || !email) {
+    return res.status(400).json({ error: "Name and email are required" });
   }
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!emailOk) {
     return res.status(400).json({ error: "Please provide a valid email address" });
   }
+  if (!message && !whatsapp && !websiteUrl) {
+    return res.status(400).json({ error: "Please include a message, WhatsApp number, or website link" });
+  }
   // Simple honeypot / length guard against spam bots
-  if (message.length > 5000) {
+  if ((message || "").length > 5000) {
     return res.status(400).json({ error: "Message is too long" });
   }
 
   const submission = await ContactSubmission.create({
     name: name.trim(),
     email: email.trim(),
-    message: message.trim(),
+    message: (message || "").trim(),
+    whatsapp: (whatsapp || "").trim(),
+    websiteUrl: (websiteUrl || "").trim(),
     language: language || "en",
   });
 

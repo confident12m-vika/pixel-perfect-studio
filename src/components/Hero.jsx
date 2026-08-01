@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import "./Hero.css";
 
@@ -16,10 +17,10 @@ export default function Hero() {
           <h1 className="hero__title">{t.hero.title}</h1>
           <p className="hero__subtitle">{t.hero.subtitle}</p>
           <div className="hero__actions">
-            <a href="#audit" className="btn btn-primary">
+            <Link to="/start" className="btn btn-primary">
               {t.hero.cta1}
               <span className="btn-arrow">→</span>
-            </a>
+            </Link>
             <a href="#work" className="btn btn-outline">
               {t.hero.cta2}
             </a>

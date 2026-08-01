@@ -62,6 +62,17 @@ export default function MessagesManager() {
                 <span className={`admin-status admin-status--${msg.status}`}>{msg.status}</span>
               </div>
               <p className="admin-message__body">{msg.message}</p>
+              {(msg.whatsapp || msg.websiteUrl) && (
+                <p className="admin-message__extra">
+                  {msg.whatsapp && <span>WhatsApp: {msg.whatsapp}</span>}
+                  {msg.whatsapp && msg.websiteUrl && <span> · </span>}
+                  {msg.websiteUrl && (
+                    <a href={msg.websiteUrl} target="_blank" rel="noreferrer">
+                      {msg.websiteUrl}
+                    </a>
+                  )}
+                </p>
+              )}
               <div className="admin-message__meta">
                 <span>{new Date(msg.createdAt).toLocaleString()}</span>
                 <span>· {msg.language?.toUpperCase()}</span>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { languages } from "../i18n/translations";
 import { useLanguage } from "../context/LanguageContext";
 import "./Header.css";
@@ -68,9 +69,9 @@ export default function Header() {
               </button>
             ))}
           </div>
-          <a href="#audit" className="btn btn-primary header-cta">
+          <Link to="/start" className="btn btn-primary header-cta">
             {t.header.cta}
-          </a>
+          </Link>
           <button
             className={`burger ${open ? "is-open" : ""}`}
             aria-label="Menu"

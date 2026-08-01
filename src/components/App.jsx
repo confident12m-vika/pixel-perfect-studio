@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import LandingPage from "./pages/LandingPage";
-import StartPage from "./pages/StartPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import RequireAdmin from "./pages/RequireAdmin";
@@ -12,7 +11,6 @@ export default function App() {
       <AdminAuthProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/start" element={<StartPage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin"

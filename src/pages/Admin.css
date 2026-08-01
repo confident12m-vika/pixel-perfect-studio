@@ -273,6 +273,11 @@
   color: var(--text-secondary);
 }
 
+.admin-message__extra {
+  font-size: 13px;
+  color: var(--bronze-light);
+}
+
 .admin-message__meta {
   font-size: 11.5px;
   color: var(--text-muted);
