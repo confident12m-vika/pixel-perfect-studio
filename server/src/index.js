@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import path from "node:path";
+import mongoose from "mongoose";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import portfolioRoutes from "./routes/portfolio.js";
@@ -21,7 +22,9 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use("/uploads", express.static(path.resolve("uploads")));
 
-app.get("/api/health", (_req, res) => res.json({ ok: true }));
+app.get("/api/health", (_req, res) => {
+  res.json({ ok: true, dbState: mongoose.connection.readyState });
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/contact", contactRoutes);

@@ -7,7 +7,7 @@ import "./StartPage.css";
 
 function StartPageInner() {
   const { t, lang } = useLanguage();
-  const [values, setValues] = useState({ name: "", email: "", whatsapp: "", websiteUrl: "" });
+  const [values, setValues] = useState({ name: "", email: "", whatsapp: "", websiteUrl: "", message: "" });
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -22,7 +22,7 @@ function StartPageInner() {
     try {
       await api.submitContact({ ...values, language: lang });
       setStatus("success");
-      setValues({ name: "", email: "", whatsapp: "", websiteUrl: "" });
+      setValues({ name: "", email: "", whatsapp: "", websiteUrl: "", message: "" });
     } catch (err) {
       setStatus("error");
       setErrorMsg(err.message);
@@ -91,6 +91,18 @@ function StartPageInner() {
               value={values.websiteUrl}
               onChange={handleChange}
               placeholder={t.startForm.websitePlaceholder}
+            />
+          </label>
+
+          <label className="contact-form__field">
+            <span>{t.startForm.messageLabel}</span>
+            <textarea
+              name="message"
+              rows={4}
+              maxLength={5000}
+              value={values.message}
+              onChange={handleChange}
+              placeholder={t.startForm.messagePlaceholder}
             />
           </label>
 

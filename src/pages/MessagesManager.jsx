@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import { api } from "../api/client";
+
+const STATUS_TABS = ["all", "new", "read", "replied", "archived"];
 
 export default function MessagesManager() {
   const { token } = useAdminAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filter, setFilter] = useState("all");
 
   const load = () => {
     setLoading(true);
@@ -38,45 +41,87 @@ export default function MessagesManager() {
     }
   };
 
+  const counts = useMemo(() => {
+    const c = { all: items.length, new: 0, read: 0, replied: 0, archived: 0 };
+    for (const m of items) c[m.status] = (c[m.status] || 0) + 1;
+    return c;
+  }, [items]);
+
+  const visible = filter === "all" ? items : items.filter((m) => m.status === filter);
+
   return (
     <div className="admin-panel">
       <div className="admin-panel__header">
         <h2>Messages</h2>
       </div>
 
+      <div className="admin-filter-tabs">
+        {STATUS_TABS.map((tab) => (
+          <button
+            key={tab}
+            className={filter === tab ? "is-active" : ""}
+            onClick={() => setFilter(tab)}
+          >
+            {tab[0].toUpperCase() + tab.slice(1)}
+            <span className="admin-filter-tabs__count">{counts[tab] || 0}</span>
+          </button>
+        ))}
+      </div>
+
       {error && <p className="admin-auth__error">{error}</p>}
 
       {loading ? (
         <p>Loading…</p>
-      ) : items.length === 0 ? (
-        <p>No messages yet.</p>
+      ) : visible.length === 0 ? (
+        <p>No messages here.</p>
       ) : (
         <div className="admin-table">
-          {items.map((msg) => (
+          {visible.map((msg) => (
             <div className="admin-message" key={msg._id}>
               <div className="admin-message__head">
                 <div>
                   <strong>{msg.name}</strong>
-                  <span className="admin-message__email"> — {msg.email}</span>
+                  <span className="admin-message__date">
+                    {new Date(msg.createdAt).toLocaleString()} · {msg.language?.toUpperCase()}
+                  </span>
                 </div>
                 <span className={`admin-status admin-status--${msg.status}`}>{msg.status}</span>
               </div>
-              <p className="admin-message__body">{msg.message}</p>
-              {(msg.whatsapp || msg.websiteUrl) && (
-                <p className="admin-message__extra">
-                  {msg.whatsapp && <span>WhatsApp: {msg.whatsapp}</span>}
-                  {msg.whatsapp && msg.websiteUrl && <span> · </span>}
-                  {msg.websiteUrl && (
+
+              <div className="admin-message__details">
+                <div className="admin-message__detail">
+                  <span className="admin-message__detail-label">Email</span>
+                  <a href={`mailto:${msg.email}`}>{msg.email}</a>
+                </div>
+                {msg.whatsapp && (
+                  <div className="admin-message__detail">
+                    <span className="admin-message__detail-label">WhatsApp</span>
+                    <a
+                      href={`https://wa.me/${msg.whatsapp.replace(/[^0-9]/g, "")}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {msg.whatsapp}
+                    </a>
+                  </div>
+                )}
+                {msg.websiteUrl && (
+                  <div className="admin-message__detail">
+                    <span className="admin-message__detail-label">Website</span>
                     <a href={msg.websiteUrl} target="_blank" rel="noreferrer">
                       {msg.websiteUrl}
                     </a>
-                  )}
-                </p>
-              )}
-              <div className="admin-message__meta">
-                <span>{new Date(msg.createdAt).toLocaleString()}</span>
-                <span>· {msg.language?.toUpperCase()}</span>
+                  </div>
+                )}
               </div>
+
+              {msg.message && (
+                <div className="admin-message__detail admin-message__detail--block">
+                  <span className="admin-message__detail-label">Message</span>
+                  <p className="admin-message__body">{msg.message}</p>
+                </div>
+              )}
+
               <div className="admin-row__actions">
                 <select value={msg.status} onChange={(e) => setStatus(msg._id, e.target.value)}>
                   <option value="new">New</option>
