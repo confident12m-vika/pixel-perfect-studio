@@ -13,6 +13,7 @@ const contactSubmissionSchema = new mongoose.Schema(
       enum: ["new", "read", "replied", "archived"],
       default: "new",
     },
+    lastReminderAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

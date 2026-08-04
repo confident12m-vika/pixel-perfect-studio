@@ -81,11 +81,23 @@ filesystem on redeploy (e.g. some serverless platforms), switch to a
 persistent volume or an object store (S3, Cloudinary) instead; the
 `portfolio/upload` route is the only place that would need to change.
 
+## Email notifications
+
+When someone submits the `/start` form, the server emails a notification
+to `NOTIFY_EMAIL` (defaults to `SMTP_USER`) via Gmail SMTP. If the
+request stays in `new` status, a reminder email goes out every 3 hours
+until it's marked `read`/`replied`/`archived` from the admin panel.
+
+Set these in `.env` to enable it (see `.env.example` for the exact
+format and how to create a Gmail App Password):
+```
+SMTP_USER=onepixelperfect@gmail.com
+SMTP_PASS=your-16-char-app-password
+NOTIFY_EMAIL=onepixelperfect@gmail.com
+```
+Without these set, the server runs normally — form submissions still
+save to MongoDB and show up in the admin panel, just no emails go out.
+
 ## Not included yet
 
-- **Sending an email** when the contact form is submitted — right now
-  submissions are only saved to MongoDB and visible in the admin panel.
-  Wiring up an email (e.g. with `nodemailer` + Gmail/SendGrid) is a small
-  addition once you have SMTP credentials you want to use — say the word
-  and it can be added.
 - **Rate limiting** on the public `/api/contact` endpoint (to reduce spam).

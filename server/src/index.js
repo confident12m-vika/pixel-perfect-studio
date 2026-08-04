@@ -4,6 +4,7 @@ import cors from "cors";
 import path from "node:path";
 import mongoose from "mongoose";
 import { connectDB } from "./config/db.js";
+import { startReminderJob } from "./utils/reminders.js";
 import authRoutes from "./routes/auth.js";
 import portfolioRoutes from "./routes/portfolio.js";
 import contactRoutes from "./routes/contact.js";
@@ -40,6 +41,7 @@ const port = process.env.PORT || 4000;
 connectDB()
   .then(() => {
     app.listen(port, () => console.log(`API listening on http://localhost:${port}`));
+    startReminderJob();
   })
   .catch((err) => {
     console.error("Failed to connect to MongoDB:", err.message);

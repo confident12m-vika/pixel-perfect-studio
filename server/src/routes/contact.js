@@ -1,8 +1,29 @@
 import { Router } from "express";
 import ContactSubmission from "../models/ContactSubmission.js";
 import { requireAdmin } from "../middleware/auth.js";
+import { sendMail } from "../utils/mailer.js";
 
 const router = Router();
+
+function submissionEmailBody(submission) {
+  const rows = [
+    ["Name", submission.name],
+    ["Email", submission.email],
+    ["WhatsApp", submission.whatsapp || "—"],
+    ["Website", submission.websiteUrl || "—"],
+    ["Language", (submission.language || "en").toUpperCase()],
+    ["Message", submission.message || "—"],
+  ];
+  const html = `
+    <h2>New request from ${submission.name}</h2>
+    <table cellpadding="6">
+      ${rows.map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${v}</td></tr>`).join("")}
+    </table>
+    <p>Open the admin panel to reply: <a href="https://www.onepixelperfect.com/admin">onepixelperfect.com/admin</a></p>
+  `;
+  const text = rows.map(([k, v]) => `${k}: ${v}`).join("\n");
+  return { html, text };
+}
 
 // Public: submit the contact form
 router.post("/", async (req, res) => {
@@ -30,7 +51,11 @@ router.post("/", async (req, res) => {
     whatsapp: (whatsapp || "").trim(),
     websiteUrl: (websiteUrl || "").trim(),
     language: language || "en",
+    lastReminderAt: new Date(),
   });
+
+  const { html, text } = submissionEmailBody(submission);
+  sendMail({ subject: `New request — ${submission.name}`, html, text }).catch(() => {});
 
   res.status(201).json({ ok: true, id: submission._id });
 });

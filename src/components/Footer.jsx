@@ -17,7 +17,7 @@ export default function Footer() {
   ];
 
   const socials = [
-    { label: "Email", href: "mailto:hello@pixelperfect.studio", icon: Mail },
+    { label: "Email", href: "mailto:hello@onepixelperfect.com", icon: Mail },
     { label: "WhatsApp", href: "https://wa.me/201558861796", icon: MessageCircle },
     { label: "Instagram", href: "https://www.instagram.com/pixelperfect.creativestudio", icon: InstagramIcon },
     { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61591301610630", icon: FacebookIcon },
@@ -67,7 +67,7 @@ export default function Footer() {
         <div className="footer-col">
           <span className="footer-col__label">{t.footer.contactsLabel}</span>
           <div className="site-footer__contacts">
-            <a href="mailto:hello@pixelperfect.studio">hello@pixelperfect.studio</a>
+            <a href="mailto:hello@onepixelperfect.com">hello@onepixelperfect.com</a>
             <a href="https://wa.me/201558861796" target="_blank" rel="noreferrer">
               WhatsApp
             </a>
