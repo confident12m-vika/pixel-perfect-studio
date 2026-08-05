@@ -1,40 +1,27 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-let transporter = null;
+let resend = null;
 
-function getTransporter() {
-  if (transporter) return transporter;
-
-  const { SMTP_USER, SMTP_PASS } = process.env;
-  if (!SMTP_USER || !SMTP_PASS) {
-    console.warn("[mailer] SMTP_USER/SMTP_PASS not set — email notifications disabled");
+function getClient() {
+  if (resend) return resend;
+  const { RESEND_API_KEY } = process.env;
+  if (!RESEND_API_KEY) {
+    console.warn("[mailer] RESEND_API_KEY not set — email notifications disabled");
     return null;
   }
-
-  transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    family: 4, // force IPv4 — Render can't reach Gmail over IPv6
-    auth: { user: SMTP_USER, pass: SMTP_PASS },
-  });
-  
-  return transporter;
+  resend = new Resend(RESEND_API_KEY);
+  return resend;
 }
 
 export async function sendMail({ subject, html, text }) {
-  const t = getTransporter();
-  const to = process.env.NOTIFY_EMAIL || process.env.SMTP_USER;
-  if (!t || !to) return;
+  const client = getClient();
+  const to = process.env.NOTIFY_EMAIL;
+  const from = process.env.MAIL_FROM || "Pixel Perfect Studio <notifications@onepixelperfect.com>";
+  if (!client || !to) return;
 
   try {
-    await t.sendMail({
-      from: `"Pixel Perfect Studio" <${process.env.SMTP_USER}>`,
-      to,
-      subject,
-      html,
-      text,
-    });
+    const { error } = await client.emails.send({ from, to, subject, html, text });
+    if (error) throw new Error(error.message || JSON.stringify(error));
     console.log(`[mailer] sent: ${subject}`);
   } catch (err) {
     console.error("[mailer] send failed:", err.message);

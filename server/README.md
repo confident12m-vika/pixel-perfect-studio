@@ -84,19 +84,29 @@ persistent volume or an object store (S3, Cloudinary) instead; the
 ## Email notifications
 
 When someone submits the `/start` form, the server emails a notification
-to `NOTIFY_EMAIL` (defaults to `SMTP_USER`) via Gmail SMTP. If the
-request stays in `new` status, a reminder email goes out every 3 hours
-until it's marked `read`/`replied`/`archived` from the admin panel.
+to `NOTIFY_EMAIL` via [Resend](https://resend.com). If the request stays
+in `new` status, a reminder email goes out every 3 hours until it's
+marked `read`/`replied`/`archived` from the admin panel.
 
 Set these in `.env` to enable it (see `.env.example` for the exact
-format and how to create a Gmail App Password):
+format):
 ```
-SMTP_USER=onepixelperfect@gmail.com
-SMTP_PASS=your-16-char-app-password
-NOTIFY_EMAIL=onepixelperfect@gmail.com
+RESEND_API_KEY=re_your_api_key_here
+MAIL_FROM=Pixel Perfect Studio <notifications@onepixelperfect.com>
+NOTIFY_EMAIL=onepixelperfectstudio@gmail.com
 ```
-Without these set, the server runs normally — form submissions still
-save to MongoDB and show up in the admin panel, just no emails go out.
+`MAIL_FROM` must be an address on a domain you've verified in Resend
+(Resend dashboard → Domains) — it doesn't need a real mailbox, it's only
+used as the outgoing "From" address. `NOTIFY_EMAIL` is where the actual
+notifications land, so that one should be a real inbox you check.
+
+Without `RESEND_API_KEY` set, the server runs normally — form
+submissions still save to MongoDB and show up in the admin panel, just
+no emails go out.
+
+(Note: an earlier version of this used Gmail SMTP directly, but Render's
+free tier blocks outbound SMTP connections, so this was switched to
+Resend's HTTPS API instead.)
 
 ## Not included yet
 

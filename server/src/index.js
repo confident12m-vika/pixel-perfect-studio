@@ -1,5 +1,8 @@
 import "dotenv/config";
 import dns from "node:dns";
+// Render's outbound network can't reach IPv6 addresses (confirmed via
+// ENETUNREACH errors connecting to Gmail SMTP). Force Node's resolver to
+// prefer IPv4 results globally so this doesn't just affect one connection.
 dns.setDefaultResultOrder("ipv4first");
 import express from "express";
 import cors from "cors";
