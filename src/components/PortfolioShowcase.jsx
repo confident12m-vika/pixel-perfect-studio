@@ -6,8 +6,8 @@ import "./PortfolioShowcase.css";
 const projects = [
   {
     image: "/assets/portfolio-viktoria.jpg",
-    url: "https://viktoriakotekhbridal.vercel.app/",
-    label: "viktoriakotekhbridal.vercel.app",
+    url: "https://viktoriakotekhbridal.com/",
+    label: "viktoriakotekhbridal.com",
   },
   {
     image: "/assets/portfolio-dahabi.jpg",
