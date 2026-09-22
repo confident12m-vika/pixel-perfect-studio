@@ -106,16 +106,13 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Message is too long" });
   }
 
-  // ── reCAPTCHA check ──
-  const isHuman = await verifyRecaptcha(recaptchaToken);
-  if (!isHuman) {
-    console.warn("[contact] reCAPTCHA failed for:", email, "token:", recaptchaToken ? "present" : "missing");
-    // نسجل المحاولة ونرفض فقط لو مفيش token خالص
-    if (!recaptchaToken) {
-      return res.status(400).json({ error: "Bot detected. Please try again." });
-    }
-    // لو فيه token بس score منخفض — نكمل مع تسجيل
-    console.warn("[contact] low score but token present — allowing submission");
+  // ── reCAPTCHA check (logging only) ──
+  if (recaptchaToken) {
+    verifyRecaptcha(recaptchaToken).then(ok => {
+      console.log("[recaptcha]", ok ? "✅ human" : "⚠️ suspicious", "email:", email);
+    }).catch(() => {});
+  } else {
+    console.warn("[recaptcha] no token — submission allowed (script may not be loaded)");
   }
 
   const submission = await ContactSubmission.create({
