@@ -90,7 +90,9 @@ function submissionEmailBody(submission) {
 
 // ── Public: submit contact form ────────────────────────────
 router.post("/", async (req, res) => {
-  const { name, email, message, whatsapp, websiteUrl, language, recaptchaToken } = req.body || {};
+  const { name, email, message, whatsapp, websiteUrl, language, recaptchaToken, hp_field } = req.body || {};
+  // Honeypot — Bot بيملأ كل الحقول بما فيها المخفية
+  if (hp_field) return res.status(200).json({ ok: true });
 
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required" });

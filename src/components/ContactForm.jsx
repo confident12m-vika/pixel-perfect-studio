@@ -17,7 +17,7 @@ async function getRecaptchaToken() {
 
 export default function ContactForm() {
   const { t, lang } = useLanguage();
-  const [values, setValues] = useState({ name: "", email: "", message: "" });
+  const [values, setValues] = useState({ name: "", email: "", message: "", hp_field: "" });
   const [status, setStatus]   = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -62,6 +62,17 @@ export default function ContactForm() {
           value={values.message} onChange={handleChange}
           placeholder={t.contactForm.messagePlaceholder} />
       </label>
+      {/* Honeypot — مخفي للبشر */}
+      <input
+        type="text"
+        name="hp_field"
+        value={values.hp_field}
+        onChange={(e) => setValues(v => ({ ...v, hp_field: e.target.value }))}
+        style={{ display: "none" }}
+        tabIndex="-1"
+        autoComplete="off"
+        aria-hidden="true"
+      />
       <button type="submit" className="btn btn-primary" disabled={status === "sending"}>
         {status === "sending" ? t.contactForm.sending : t.contactForm.submit}
         <span className="btn-arrow">→</span>
